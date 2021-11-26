@@ -1,0 +1,9 @@
+# THIS FOLDER CONTAINS ALL THE DOCUMENTATIONS OF THIS PROJECT
+
+## ERD
+
+## Wireframes
+
+## SQL Queries
+
+## Designs
