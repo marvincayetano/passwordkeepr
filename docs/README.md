@@ -23,7 +23,8 @@
 - [ ] For this app, it is ok to store the passwords as string but remember that this is not the way for production apps! As a stretch feature, consider storing a masterkey, which is used to encrypt each and de-encrypt incoming information from the server to the client. Reading into what salting is for passwords will be the first step for this stretch.
 
 ## ERD
-![passwordkeepr_erd](https://user-images.githubusercontent.com/8416681/143723176-fa46f44a-5dec-4365-ad43-bb042f539caa.PNG)
+
+![passwordkeepr_erd](./passwordkeepr_erd.png)
 
 ## Wireframes
 

@@ -1,0 +1,48 @@
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS user_organizations CASCADE;
+DROP TABLE IF EXISTS organizations CASCADE;
+DROP TABLE IF EXISTS accounts CASCADE;
+DROP TABLE IF EXISTS category CASCADE;
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  createdAt DATE NOT NULL,
+  updatedAt DATE NOT NULL
+);
+
+
+CREATE TABLE user_organizations (
+  id SERIAL PRIMARY KEY NOT NULL,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  organization_id INTEGER REFERENCES organizations(id) ON DELETE CASCADE
+);
+
+CREATE TABLE organizations (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  creator_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  createdAt DATE NOT NULL,
+  updatedAt DATE NOT NULL
+);
+
+CREATE TABLE accounts (
+  id SERIAL PRIMARY KEY NOT NULL,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  organization_id INTEGER REFERENCES organizations(id) ON DELETE CASCADE,
+  category_id INTEGER REFERENCES category(id) ON DELETE CASCADE,
+  name VARCHAR(255) NOT NULL,
+  url VARCHAR(255) NOT NULL,
+  username VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  createdAt DATE NOT NULL,
+  updatedAt DATE NOT NULL
+);
+
+CREATE TABLE category (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL
+);
