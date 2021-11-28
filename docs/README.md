@@ -24,7 +24,7 @@
 
 ## ERD
 
-![passwordkeepr_erd](./passwordkeepr_erd.png)
+![passwordkeepr_erd](./passwordkeepr_erd.PNG)
 
 ## Wireframes
 
