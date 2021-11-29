@@ -1,7 +1,7 @@
 const bcrypt = require('bcrypt');
-const { addUser } = require('../db/utils');
 
 module.exports = function(router, database) {
+  const { addUser, getUserWithEmailPassword } = require('../db/utils')(database);
 
   // Create a new user
   router.post('/register', (req, res) => {
@@ -10,7 +10,6 @@ module.exports = function(router, database) {
 
     addUser(user, database)
     .then(user => {
-      console.log("AFTER REGISTER", user);
       if (!user) {
         res.send({error: "error"});
         return;
@@ -29,7 +28,7 @@ module.exports = function(router, database) {
    * @param {String} password encrypted
    */
   const login =  function(email, password) {
-    return database.getUserWithEmail(email)
+    return getUserWithEmailPassword(email, password)
     .then(user => {
       if (bcrypt.compareSync(password, user.password)) {
         return user;
@@ -48,14 +47,14 @@ module.exports = function(router, database) {
           return;
         }
         req.session.userId = user.id;
-        res.send({user: {name: user.name, email: user.email, id: user.id}});
+        res.render('index', {user: {name: user.name, email: user.email, id: user.id}});
       })
       .catch(e => res.send(e));
   });
 
   router.post('/logout', (req, res) => {
     req.session.userId = null;
-    res.send({});
+    res.redirect('/');
   });
 
   router.get("/me", (req, res) => {
