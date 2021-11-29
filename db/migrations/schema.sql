@@ -8,8 +8,8 @@ CREATE TABLE users (
   id SERIAL PRIMARY KEY NOT NULL,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  createdAt DATE NOT NULL,
-  updatedAt DATE NOT NULL
+  created_at TIMESTAMPTZ DEFAULT Now(),
+  updated_at TIMESTAMPTZ
 );
 
 
@@ -18,8 +18,8 @@ CREATE TABLE organizations (
   name VARCHAR(255) NOT NULL,
   description VARCHAR(255) NOT NULL,
   creator_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  createdAt DATE NOT NULL,
-  updatedAt DATE NOT NULL
+  created_at TIMESTAMPTZ,
+  updated_at TIMESTAMPTZ
 );
 
 CREATE TABLE user_organizations (
@@ -38,8 +38,8 @@ CREATE TABLE accounts (
   url VARCHAR(255) NOT NULL,
   username VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  createdAt DATE NOT NULL,
-  updatedAt DATE NOT NULL
+  created_at TIMESTAMPTZ DEFAULT Now(),
+  updated_at TIMESTAMPTZ
 );
 
 CREATE TABLE category (
