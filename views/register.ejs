@@ -13,7 +13,9 @@
   </head>
 
   <body>
-    <% if(typeof error !== 'undefined') { %> <%= error %> <%}%>
+    <%- include('./partials/_header.ejs') %>
+    <!-- <% if(typeof error !== 'undefined')
+    { %> <%= error %> <%}%> -->
     <form action="/register" method="post">
       <input type="text" name="email" type="email" />
       <input type="text" name="password" type="password" />

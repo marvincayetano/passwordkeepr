@@ -15,6 +15,10 @@ module.exports = function(router, database) {
     res.render('organizations');
   });
 
+  router.get('/organizations/:id', (req, res) => {
+    res.render('organizations');
+  });
+
   router.get('/', (req, res) => {
     res.render('index');
   });

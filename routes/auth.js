@@ -21,7 +21,7 @@ module.exports = function(router, database) {
 
       user.password = bcrypt.hashSync(user.password, 12);
 
-      addUser(user, database)
+      addUser(user)
       .then(user => {
         if (!user) {
           res.send({error: "Error occured while creatingn new account..."});
@@ -75,7 +75,7 @@ module.exports = function(router, database) {
       return;
     }
 
-    database.getUserWithId(userId)
+    getUserWithId(userId)
       .then(user => {
         if (!user) {
           res.send({error: "no user with that id"});
