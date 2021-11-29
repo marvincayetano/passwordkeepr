@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Log In</title>
+  </head>
+
+  <body>
+    <%- include("partials/_header") %>
+
+      <div >
+        <h1>Login</h1>
+        <form action="./login" method="POST">
+          <div >
+            <div >
+              <span
+                >Email</span
+              >
+            </div>
+            <input
+              class="form-control"
+              type="text"
+              name="email"
+              placeholder="Enter your email please"
+            />
+          </div>
+
+          <div >
+            <div >
+              <span
+                >Password</span
+              >
+            </div>
+            <input
+              class="form-control"
+              type="password"
+              name="password"
+              placeholder="Enter your password please"
+            />
+          </div>
+          <button
+            id="login"
+            type="submit"
+          >
+            Login
+          </button>
+        </form>
+      </div>
+
+      <div></div>
+    </div>
+  </body>
+</html>

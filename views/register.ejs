@@ -1,0 +1,56 @@
+!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Register</title>
+  </head>
+
+  <body>
+    <%- include("partials/_header.ejs") %>
+
+
+      <div>
+        <h1>Register</h1>
+        <form action="./register" method="POST">
+          <div>
+            <div>
+              <span>Name</span>
+            </div>
+            <input
+              class="form-control"
+              type="text"
+              name="name"
+              placeholder="Enter your name please"
+            />
+          </div>
+          <div>
+            <div>
+              <span>Email</span>
+            </div>
+            <input
+              type="text"
+              name="email"
+              placeholder="Enter your email please"
+            />
+          </div>
+          <div>
+            <div>
+              <spa>Password</span>
+            </div>
+            <input
+              class="form-control"
+              type="password"
+              name="password"
+              placeholder="Enter your password please"
+            />
+          </div>
+          <button
+            id="register"
+            type="submit"
+          >
+            REGISTER
+          </button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
