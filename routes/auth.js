@@ -1,33 +1,45 @@
 const bcrypt = require('bcrypt');
 
 module.exports = function(router, database) {
-  const { addUser, getUserWithEmailPassword } = require('../db/utils')(database);
+  const { addUser, getUserWithEmailPassword, getUserWithEmail } = require('../db/utils')(database);
 
   // Create a new user
   router.post('/register', (req, res) => {
     const user = req.body;
-    user.password = bcrypt.hashSync(user.password, 12);
 
-    addUser(user, database)
-    .then(user => {
-      if (!user) {
-        res.send({error: "error"});
+    getUserWithEmail(user.email).then(resultUser => {
+      if(resultUser !== null) {
+        res.render('register', { error: "Email already exists!" });
         return;
       }
 
-      req.session.userId = user.id;
-      res.redirect("/index");
-    })
-    .catch(e => res.send(e));
 
+      if(user.password !== user.confirmPassword) {
+        res.render('register', { error: "Passwords do not match" });
+        return;
+      }
+
+      user.password = bcrypt.hashSync(user.password, 12);
+
+      addUser(user, database)
+      .then(user => {
+        if (!user) {
+          res.send({error: "Error occured while creatingn new account..."});
+          return;
+        }
+
+        req.session.userId = user.id;
+        res.redirect("/index");
+      })
+      .catch(e => {
+        res.render('register', { error: e.message })
+        return;
+      });
+
+    });
   });
 
-  /**
-   * Check if a user exists with a given username and password
-   * @param {String} email
-   * @param {String} password encrypted
-   */
-  const login =  function(email, password) {
+  const login = function(email, password) {
     return getUserWithEmailPassword(email, password)
     .then(user => {
       if (bcrypt.compareSync(password, user.password)) {
@@ -36,20 +48,19 @@ module.exports = function(router, database) {
       return null;
     });
   }
-  exports.login = login;
 
   router.post('/login', (req, res) => {
     const {email, password} = req.body;
     login(email, password)
       .then(user => {
         if (!user) {
-          res.send({error: "error"});
+          res.send({error: "Invalid email or password!"});
           return;
         }
         req.session.userId = user.id;
-        res.render('index', {user: {name: user.name, email: user.email, id: user.id}});
+        res.render('index', { user });
       })
-      .catch(e => res.send(e));
+      .catch(e => res.send({ error: e.message }));
   });
 
   router.post('/logout', (req, res) => {
@@ -71,9 +82,9 @@ module.exports = function(router, database) {
           return;
         }
 
-        res.send({user: {name: user.name, email: user.email, id: userId}});
+        res.send({ user });
       })
-      .catch(e => res.send(e));
+      .catch(e => res.send({ error: e.message }));
   });
 
   return router;
