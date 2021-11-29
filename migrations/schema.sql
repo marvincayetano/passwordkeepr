@@ -1,6 +1,6 @@
 DROP TABLE IF EXISTS users CASCADE;
-DROP TABLE IF EXISTS user_organizations CASCADE;
 DROP TABLE IF EXISTS organizations CASCADE;
+DROP TABLE IF EXISTS user_organizations CASCADE;
 DROP TABLE IF EXISTS accounts CASCADE;
 DROP TABLE IF EXISTS category CASCADE;
 
@@ -13,12 +13,6 @@ CREATE TABLE users (
 );
 
 
-CREATE TABLE user_organizations (
-  id SERIAL PRIMARY KEY NOT NULL,
-  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  organization_id INTEGER REFERENCES organizations(id) ON DELETE CASCADE
-);
-
 CREATE TABLE organizations (
   id SERIAL PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
@@ -27,6 +21,13 @@ CREATE TABLE organizations (
   createdAt DATE NOT NULL,
   updatedAt DATE NOT NULL
 );
+
+CREATE TABLE user_organizations (
+  id SERIAL PRIMARY KEY NOT NULL,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  organization_id INTEGER REFERENCES organizations(id) ON DELETE CASCADE
+);
+
 
 CREATE TABLE accounts (
   id SERIAL PRIMARY KEY NOT NULL,

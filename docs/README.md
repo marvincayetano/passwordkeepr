@@ -26,6 +26,12 @@
 
 ![passwordkeepr_erd](./passwordkeepr_erd.PNG)
 
+```
+psql
+\i ./migrations/schema.sql
+\i ./seeds/seeds.sql
+```
+
 ## Wireframes
 
 ## SQL Queries
