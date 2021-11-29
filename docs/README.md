@@ -28,8 +28,10 @@
 
 ```
 psql
-\i ./migrations/schema.sql
-\i ./seeds/seeds.sql
+CREATE DATABASE midterm;
+\c midterm
+\i ./db/migrations/schema.sql
+\i ./db/seeds/seeds.sql
 ```
 
 ## Wireframes

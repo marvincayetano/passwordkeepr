@@ -13,7 +13,16 @@
   </head>
 
   <body>
-    <h1>Have fun! 🥔</h1>
-    <form action="/api/auth/register"></form>
+    <%- include('./partials/_header.ejs') %>
+    <!-- <% if(typeof error !== 'undefined')
+    { %> <%= error %> <%}%> -->
+    <form action="/register" method="post">
+      <input type="text" name="email" type="email" />
+      <input type="text" name="password" type="password" />
+      <input type="text" name="confirmPassword" type="password" />
+      <button>Register</button>
+    </form>
+
+    <a href="/login">Login</a>
   </body>
 </html>
