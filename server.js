@@ -13,6 +13,7 @@ const cookieSession = require("cookie-session")
 const { Pool } = require("pg");
 const dbParams = require("./lib/db.js");
 const db = new Pool(dbParams);
+const {addUser, getUserWithEmailPassword} = require("./db/utils/index.js")
 db.connect();
 
 // Load the logger first so all (static) HTTP requests are logged to STDOUT
@@ -64,7 +65,38 @@ app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
 
+app.get("/register", (req, res) => {
+  const templateVars = {user: null}
+  res.render("register", templateVars)
+})
+app.post("/register", (req, res) => {
+ const user = addUser(req.body)
+ const id = user.id;
+ req.session.id = id;
+  res.redirect("/")
+})
+
 app.get("/login", (req, res) => {
   const templateVars = {user: null}
   res.render("login", templateVars)
+})
+
+app.post("/login", (req, res) => {
+const email = req.body.email;
+const password = req.body.password;
+
+const user = getUserWithEmailPassword(email, password)
+
+if(!user) {
+  res.send("user does not exist")
+}
+const id = user.id
+req.session.id = id;
+
+  res.redirect('/')
+
+})
+
+app.post("/logout", (req, res) => {
+
 })
