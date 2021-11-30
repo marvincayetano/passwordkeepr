@@ -1,3 +1,6 @@
+<head>
+  <script defer type="text/javascript" src="/scripts/accounts.js"></script>
+</head>
 <header>
   <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <a class="navbar-brand" href="/urls">PasswordKeeper</a>
@@ -14,15 +17,15 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ml-auto">
-        <% if(typeof user !== 'undefined') { %>
         <form action="/logout" method="POST">
           <button>Logout</button>
         </form>
-        <% } else { %>
+
         <a class="nav-item nav-link" href="/login">login</a>
         <a class="nav-item nav-link" href="/register">Register</a>
-        <% } %>
+
       </div>
     </div>
   </nav>
 </header>
+
