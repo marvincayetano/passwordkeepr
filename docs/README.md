@@ -24,18 +24,81 @@
 
 ## ERD
 
-![passwordkeepr_erd](./passwordkeepr_erd.PNG)
+![ERD](./erd.png)
 
-```
+```sql
 psql
 CREATE DATABASE midterm;
 \c midterm
 \i ./db/migrations/schema.sql
 \i ./db/seeds/seeds.sql
+// CHANGE YOUR .env to match your local username and password
 ```
 
 ## Wireframes
 
+![Wireframe](./wireframe.png)
+
 ## SQL Queries
+
+```sql
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS organizations CASCADE;
+DROP TABLE IF EXISTS user_organizations CASCADE;
+DROP TABLE IF EXISTS accounts CASCADE;
+DROP TABLE IF EXISTS category CASCADE;
+
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY NOT NULL,
+  email VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  organization_id INTEGER REFERENCES organizations(id) ON DELETE CASCADE,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE organizations (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  creator_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE accounts (
+  id SERIAL PRIMARY KEY NOT NULL,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
+  organization_id INTEGER REFERENCES organizations(id) ON DELETE CASCADE,
+  category_id INTEGER REFERENCES category(id) ON DELETE CASCADE,
+  name VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL,
+  url VARCHAR(255) NOT NULL,
+  username VARCHAR(255) NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE TABLE category (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL
+);
+
+INSERT INTO users (email, password) VALUES
+('randomguyfromcaainsurance@caa.com', 'IloveInsurance'),
+('sandwichartist@subway.com', 'FootlongMeatball'),
+('timmy@timhortons.ca', 'doubleDoublePlease'),
+('winwin@winners.ca', 'hellYeahSir'),
+('szym40@bookez.site', 'railroad25'),
+('paimuchin@hanzganteng.tk', 'helldsakfjeahSir'),
+('whoareyou@gymshark.ca', 'steroidBoy');
+
+INSERT INTO category (name, description) VALUES
+('Social', 'Social Media (eg. Facebook, Twitter, Instagram, etc)'),
+('Work', 'Work Related'),
+('Entertainment', 'Entertainment (eg. Youtube, Netflix, etc)');
+```
 
 ## Designs
