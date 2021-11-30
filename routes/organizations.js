@@ -12,14 +12,15 @@ module.exports = function(router, database) {
         return;
       }
 
+      // It doesn't exist yet so we can create a new organization
       addOrganization(user)
-      .then(user => {
-        if (!user) {
-          res.send({error: "Error occured while creating a new account..."});
+      .then(organization => {
+        if (!organization) {
+          res.send({error: "Error occured while creating a new organization..."});
           return;
         }
 
-        res.redirect("/index");
+        res.redirect('/organizations');
       })
       .catch(e => {
         res.render('/organizations', { error: e.message })
@@ -37,7 +38,7 @@ module.exports = function(router, database) {
     // Making sure the invite is coming from the creator
     getOrganizationWithId(organization.id, id).then(result => {
       // Not the creator
-      if(result === []) {
+      if(result === null) {
         res.send({ error: "Invalid API request!" });
         return;
       }
@@ -67,7 +68,7 @@ module.exports = function(router, database) {
     // Making sure the invite is coming from the creator
     getOrganizationWithId(organization.id, id).then(result => {
       // Not the creator
-      if(result === []) {
+      if(result === null) {
         res.send({ error: "Invalid API request!" });
         return;
       }

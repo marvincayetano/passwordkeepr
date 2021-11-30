@@ -1,4 +1,6 @@
 module.exports = function(router, database) {
+  const { getOrganizationWithId } = require('../db/utils')(database);
+
   router.get('/register', (_req, res) => {
     res.render('register');
   });
@@ -21,7 +23,11 @@ module.exports = function(router, database) {
   });
 
   router.get('/organizations/:id', (_req, res) => {
-    res.render('organizations');
+    const {id} = req.params;
+
+    getOrganizationWithId(id).then(organization => {
+      res.render(`organizations/${id}`, organization);
+    });
   });
 
   router.get('/', (_req, res) => {
