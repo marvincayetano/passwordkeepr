@@ -3,6 +3,11 @@ module.exports = function(router, database) {
     res.render('register');
   });
 
+  router.get('/login/:id', (req, res) => {
+    req.session.id = req.params.id;
+    res.render('index');
+  });
+
   router.get('/login', (_req, res) => {
     res.render('login');
   });

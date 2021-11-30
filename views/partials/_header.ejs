@@ -14,7 +14,7 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav ml-auto">
-        <% if(user) { %>
+        <% if(typeof user !== 'undefined') { %>
         <form action="/logout" method="POST">
           <button>Logout</button>
         </form>
@@ -26,4 +26,3 @@
     </div>
   </nav>
 </header>
->>>>>>> 4ac2a3bc69422195568238edcfa233e143526e00
