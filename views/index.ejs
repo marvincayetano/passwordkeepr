@@ -18,9 +18,16 @@
   </head>
   <body>
     <%- include("partials/_header") %>
-    <main style="margin: 1em"></main>
+    <main style="margin: 1em">
+    <form ACTION = '/account'>
+      <input type= 'text' name = 'URL' placeholder='Enter Website Here'/>
+      <input type= 'text' name = 'Username' placeholder = 'Username'/>
+      <input type = 'text' name = 'Password' placeholder = 'Password'/>
+      <button type= 'submit'>Submit</button>
+    </form>
+  </main>
 
-    <div class="unauthorized">Please login or register to proceed</div>
+    <!-- <div class="unauthorized">Please login or register to proceed</div> -->
 
     <!-- Bootstrap JS -->
     <script
