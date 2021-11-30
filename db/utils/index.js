@@ -72,10 +72,10 @@ module.exports = function(pool) {
       });
   }
 
-  const getOrganizationWithId = function(id, creatorId) {
+  const getOrganizationWithId = function(id) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`SELECT * FROM organizations WHERE id=$1 AND creator_id=$2;`, [id, creatorId])
+        .query(`SELECT * FROM organizations JOIN accounts ON organizations.id = accounts.organization_id WHERE organizations.id=$1 LIMIT 1;`, [id])
         .then((result) => {
           if(result && result.rowCount) {
             resolve(result.rows[0])
