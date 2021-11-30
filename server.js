@@ -49,11 +49,13 @@ const usersRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 // All the gets are here
 const pagesRoutes = require('./routes/pages');
+const accountRoutes = require('./routes/accounts')
 
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 app.use("/", authRoutes(router, db));
 app.use("/", pagesRoutes(router, db));
+app.use("/", accountRoutes(router, db));
 
 // Note: mount other resources here, using the same pattern above
 
