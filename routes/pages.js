@@ -1,25 +1,25 @@
 module.exports = function(router, database) {
-  router.get('/register', (req, res) => {
+  router.get('/register', (_req, res) => {
     res.render('register');
   });
 
-  router.get('/login', (req, res) => {
+  router.get('/login', (_req, res) => {
     res.render('login');
   });
 
-  router.get('/accounts', (req, res) => {
+  router.get('/accounts', (_req, res) => {
     res.render('accounts');
   });
 
-  router.get('/organizations', (req, res) => {
+  router.get('/organizations', (_req, res) => {
     res.render('organizations');
   });
 
-  router.get('/organizations/:id', (req, res) => {
+  router.get('/organizations/:id', (_req, res) => {
     res.render('organizations');
   });
 
-  router.get('/', (req, res) => {
+  router.get('/', (_req, res) => {
     res.render('index');
   });
 
