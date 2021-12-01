@@ -52,9 +52,7 @@ CREATE TABLE users (
   id SERIAL PRIMARY KEY NOT NULL,
   email VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  organization_id INTEGER REFERENCES organizations(id) ON DELETE CASCADE,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE organizations (
@@ -62,8 +60,15 @@ CREATE TABLE organizations (
   name VARCHAR(255) NOT NULL,
   description VARCHAR(255) NOT NULL,
   creator_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+ALTER TABLE users ADD organization_id INTEGER REFERENCES organizations(id) ON DELETE CASCADE;
+
+CREATE TABLE category (
+  id SERIAL PRIMARY KEY NOT NULL,
+  name VARCHAR(255) NOT NULL,
+  description VARCHAR(255) NOT NULL
 );
 
 CREATE TABLE accounts (
@@ -76,14 +81,7 @@ CREATE TABLE accounts (
   url VARCHAR(255) NOT NULL,
   username VARCHAR(255) NOT NULL,
   password VARCHAR(255) NOT NULL,
-  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP,
-  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-);
-
-CREATE TABLE category (
-  id SERIAL PRIMARY KEY NOT NULL,
-  name VARCHAR(255) NOT NULL,
-  description VARCHAR(255) NOT NULL
+  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 INSERT INTO users (email, password) VALUES
@@ -99,6 +97,11 @@ INSERT INTO category (name, description) VALUES
 ('Social', 'Social Media (eg. Facebook, Twitter, Instagram, etc)'),
 ('Work', 'Work Related'),
 ('Entertainment', 'Entertainment (eg. Youtube, Netflix, etc)');
+
+INSERT INTO organizations(name, description, creator_id) VALUES
+('Lighthouse Labs Student', 'Organization for students of lighthouse labs', 1);
+
+UPDATE users SET organization_id=1 WHERE id=1;
 ```
 
 ## Designs

@@ -1,5 +1,5 @@
 module.exports = function(router, database) {
-  const { getOrganizationWithId } = require('../db/utils')(database);
+  const { getAccountWithOrgId, getOrganizationWithUserId } = require('../db/utils')(database);
 
   router.get('/register', (_req, res) => {
     res.render('register');
@@ -18,15 +18,27 @@ module.exports = function(router, database) {
     res.render('accounts');
   });
 
-  router.get('/organizations', (_req, res) => {
-    res.render('organizations');
+  router.get('/organization/create', (req, res) => {
+    getOrganizationWithUserId(req.session.id).then(result => {
+      console.log(result);
+      if(result !== null) {
+        res.redirect(`/organization/${result.organization_id}`);
+      } else {
+        res.render('organizationCreate');
+      }
+    });
   });
 
-  router.get('/organizations/:id', (_req, res) => {
-    const {id} = req.params;
-
-    getOrganizationWithId(id).then(organization => {
-      res.render(`organizations/${id}`, organization);
+  router.get('/organization/:id', (req, res) => {
+    getOrganizationWithUserId(req.session.id).then(userWithOrg => {
+      if(userWithOrg) {
+        getAccountWithOrgId(userWithOrg.organization_id).then(accounts => {
+          userWithOrg.accounts = accounts;
+          res.render('organization', { data: userWithOrg });
+        });
+      } else {
+        res.render('organizationCreate');
+      }
     });
   });
 

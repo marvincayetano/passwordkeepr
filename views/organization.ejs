@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+
+    <!-- Bootstrap CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css"
+      integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
+      crossorigin="anonymous"
+    />
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <!-- <script src="/scripts/organization.js"></script> -->
+    <title>PasswordKeeper</title>
+  </head>
+  <body>
+    <%- include("partials/_header") %>
+    <main class="d-flex flex-column align-items-center pt-5">
+      <div class="container-fluid w-50">
+        <% if(typeof message !== 'undefined') { %>
+        <div class="alert alert-success" role="alert"><%= message %></div>
+        <% } %>
+        <div class="d-flex justify-content-between">
+          <h1><%= data.name %></h1>
+          <div>
+            <% if(data.creator_id === data.user_id) { %>
+            <!-- <button type="button" class="btn btn-secondary">Edit</button> -->
+            <button
+              type="button"
+              class="btn btn-success"
+              data-toggle="modal"
+              data-target="#addUserModal"
+            >
+              Add User
+            </button>
+            <button
+              type="button"
+              class="btn btn-danger"
+              data-toggle="modal"
+              data-target="#exampleModal"
+            >
+              Delete
+            </button>
+            <% } %>
+            <!-- Modal Delete -->
+            <div
+              class="modal fade"
+              id="exampleModal"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">
+                      Delete <%= data.name %> ?
+                    </h5>
+                  </div>
+                  <div class="modal-body">
+                    This will delete the organization completely
+                  </div>
+                  <div class="modal-footer">
+                    <div class="modal-footer">
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                      >
+                        Close
+                      </button>
+                      <form
+                        method="post"
+                        action="/organization/<%= data.organization_id %>/delete"
+                      >
+                        <input
+                          type="hidden"
+                          id="orgInput"
+                          name="orgId"
+                          value="<%= data.id %>"
+                        />
+                        <button type="submit" class="btn btn-danger">
+                          Delete
+                        </button>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Modal Delete -->
+            <!-- Modal Add User -->
+            <div
+              class="modal fade"
+              id="addUserModal"
+              tabindex="-1"
+              aria-labelledby="exampleModalLabel"
+              aria-hidden="true"
+            >
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <form
+                    method="post"
+                    action="/organization/<%= data.organization_id %>/invite"
+                  >
+                    <div class="modal-header">
+                      <h5 class="modal-title" id="exampleModalLabel">
+                        Add new user
+                      </h5>
+                    </div>
+                    <div class="modal-body">
+                      <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input
+                          type="email"
+                          class="form-control"
+                          id="exampleInputEmail1"
+                          aria-describedby="emailHelp"
+                          placeholder="Enter email"
+                          name="email"
+                        />
+                        <small id="emailHelp" class="form-text text-muted"
+                          >We'll never share your email with anyone else.</small
+                        >
+                      </div>
+                    </div>
+                    <div class="modal-footer">
+                      <div class="modal-footer">
+                        <button
+                          type="button"
+                          class="btn btn-secondary"
+                          data-dismiss="modal"
+                        >
+                          Close
+                        </button>
+                        <input
+                          type="hidden"
+                          id="orgInput"
+                          name="orgId"
+                          value="<%= data.id %>"
+                        />
+                        <button type="submit" class="btn btn-success">
+                          Add to org
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
+            <!-- Modal Delete -->
+          </div>
+        </div>
+        <h5><%= data.description %></h5>
+        <nav aria-label="breadcrumb" class="pt-5">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item active" aria-current="page">
+              Available Accounts
+            </li>
+          </ol>
+        </nav>
+      </div>
+    </main>
+
+    <!-- Bootstrap JS -->
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+      integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+      integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+      crossorigin="anonymous"
+    ></script>
+  </body>
+</html>
