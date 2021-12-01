@@ -20,26 +20,24 @@ module.exports = function(router, database) {
 
   router.get('/organization/create', (req, res) => {
     getOrganizationWithUserId(req.session.id).then(result => {
+      console.log(result);
       if(result !== null) {
-        res.redirect(`/organization/${result.id}`);
+        res.redirect(`/organization/${result.organization_id}`);
       } else {
-        res.render('organization', result);
+        res.render('organizationCreate');
       }
     });
   });
 
   router.get('/organization/:id', (req, res) => {
-    const {id} = req.params;
-
     getOrganizationWithUserId(req.session.id).then(userWithOrg => {
       if(userWithOrg) {
-        getAccountWithOrgId(id).then(accounts => {
+        getAccountWithOrgId(userWithOrg.organization_id).then(accounts => {
           userWithOrg.accounts = accounts;
-          console.log(userWithOrg);
           res.render('organization', { data: userWithOrg });
         });
       } else {
-        res.render('organizationCreate', { error: "Invalid URL..."});
+        res.render('organizationCreate');
       }
     });
   });

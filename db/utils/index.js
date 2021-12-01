@@ -141,12 +141,11 @@ module.exports = function(pool) {
     });
   }
 
-  const addUserToOrganization =  function(organizationId, creatorId) {
+  const addUserToOrganization =  function(organizationId, email) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`INSERT INTO user_organizations (user_id, organization_id) VALUES ($1, $2) RETURNING *;`, [creatorId, organizationId])
+        .query(`UPDATE users SET organization_id=$1 WHERE email=$2 RETURNING *;`, [organizationId, email])
         .then((result) => {
-          console.log(result);
           if(result && result.rowCount) {
             resolve(result.rows[0])
           }
@@ -180,12 +179,13 @@ module.exports = function(pool) {
   const deleteOrganization =  function(id, creatorId) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`DELETE FROM organizations WHERE id=$1 AND creator_id=$2;`, [id, creatorId])
+        .query(`UPDATE users SET organization_id=NULL WHERE organization_id=$1;`, [id])
         .then(() => {
           pool
-            .query(`DELETE FROM user_organizations WHERE organization_id=$1;`, [id]);
-
-          resolve(null);
+            .query(`DELETE FROM organizations WHERE id=$1 AND creator_id=$2;`, [id, creatorId])
+            .then(() => {
+              resolve(null);
+            });
         })
         .catch((err) => {
           reject(err);
