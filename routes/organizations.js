@@ -1,37 +1,40 @@
 module.exports = function(router, database) {
-  const { addOrganization, addUserToOrganization, getOrganizationWithId, getOrganizationWithNameId, editOrganization, deleteOrganization } = require('../db/utils')(database);
+  const { addOrganization, addUserToOrganization, getOrganizationWithId, editOrganization, deleteOrganization, getUserWithId } = require('../db/utils')(database);
 
   // Create a new organization
-  router.post('/organizations', (req, res) => {
+  router.post('/organization', (req, res) => {
     const organization = req.body;
+    if(!req.session.id) {
+      res.redirect('/login');
+      return;
+    }
 
-    // Check if organization with the same name exists with your id
-    getOrganizationWithNameId(organization.name, req.session.id).then(result => {
-      if(result !== null) {
-        res.send({ error: "Organization with the same name already exists!" });
+    // Check if user has organization already
+    getUserWithId(req.session.id).then(user => {
+      if(user.organization_id) {
+        res.redirect(`/organization/${user.organization_id}`);
         return;
       }
 
-      // It doesn't exist yet so we can create a new organization
-      addOrganization(user)
+      // User doesn't have an org yet so you can create one
+      addOrganization(organization, req.session.id)
       .then(organization => {
         if (!organization) {
           res.send({error: "Error occured while creating a new organization..."});
           return;
         }
 
-        res.redirect('/organizations');
+        res.redirect(`/organization/${organization.id}`);
       })
       .catch(e => {
-        res.render('/organizations', { error: e.message })
+        res.render('/organizationCreate', { error: e.message })
         return;
       });
-
     });
   });
 
   // Add User to Organization only the creator can do it
-  router.post('/organizations/:id/invite', (req, res) => {
+  router.post('/organization/:id/invite', (req, res) => {
     const organization = req.body;
     const id = req.session.id;
 
@@ -53,7 +56,7 @@ module.exports = function(router, database) {
         res.redirect("/index");
       })
       .catch(e => {
-        res.render('/organizations', { error: e.message })
+        res.render('/organization', { error: e.message })
         return;
       });
 
@@ -61,7 +64,7 @@ module.exports = function(router, database) {
   });
 
   // Update Organization name or description
-  router.put('/organizations/:id', (req, res) => {
+  router.put('/organization/:id', (req, res) => {
     const organization = req.body;
     const id = req.session.id;
 
@@ -80,10 +83,10 @@ module.exports = function(router, database) {
           return;
         }
 
-        res.redirect("/organizations");
+        res.redirect("/organization");
       })
       .catch(e => {
-        res.render('/organizations', { error: e.message })
+        res.render('/organization', { error: e.message })
         return;
       });
 
@@ -91,7 +94,7 @@ module.exports = function(router, database) {
   });
 
   // Delete User FROM Organization make sure to not delete creator
-  router.delete('/organizations/:id', (req, res) => {
+  router.delete('/organization/:id', (req, res) => {
     const id = req.body.id;
     const creatorId = req.session.id;
 

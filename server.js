@@ -9,6 +9,7 @@ const app = express();
 const morgan = require("morgan");
 const router  = express.Router();
 const cookieSession = require("cookie-session")
+const bodyParser = require("body-parser");
 
 // PG database client/connection setup
 const { Pool } = require("pg");
@@ -21,6 +22,11 @@ db.connect();
 // 'dev' = Concise output colored by response status for development use.
 //         The :status token will be colored red for server error codes, yellow for client error codes, cyan for redirection codes, and uncolored for all other codes.
 app.use(morgan("dev"));
+
+app.use(bodyParser.urlencoded({
+  extended: true
+}));
+app.use(bodyParser.json());
 
 app.use(cookieSession({
   name: 'session',
@@ -49,13 +55,15 @@ const usersRoutes = require("./routes/users");
 const authRoutes = require("./routes/auth");
 // All the gets are here
 const pagesRoutes = require('./routes/pages');
-const accountRoutes = require('./routes/accounts')
+const accountRoutes = require('./routes/accounts');
+const organizationRoutes = require('./routes/organizations');
 
 // Mount all resource routes
 // Note: Feel free to replace the example routes below with your own
 app.use("/", authRoutes(router, db));
 app.use("/", pagesRoutes(router, db));
 app.use("/", accountRoutes(router, db));
+app.use("/", organizationRoutes(router, db));
 
 // Note: mount other resources here, using the same pattern above
 
