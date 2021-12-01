@@ -72,10 +72,27 @@ module.exports = function(pool) {
       });
   }
 
-  const getOrganizationWithId = function(id) {
+  const getOrganizationWithUserId = function(id) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`SELECT * FROM organizations JOIN accounts ON organizations.id = accounts.organization_id WHERE organizations.id=$1 LIMIT 1;`, [id])
+        .query(`SELECT *, users.id as user_id FROM organizations JOIN users ON organizations.id = users.organization_id WHERE users.id=$1 LIMIT 1;`, [id])
+        .then((result) => {
+          if(result && result.rowCount) {
+            resolve(result.rows[0])
+          }
+
+          resolve(null);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+      });
+  }
+
+  const getAccountWithOrgId = function(id) {
+    return new Promise((resolve, reject) => {
+      pool
+        .query(`SELECT * FROM accounts JOIN organizations ON organizations.id = accounts.organization_id WHERE organizations.id=$1 LIMIT 1;`, [id])
         .then((result) => {
           if(result && result.rowCount) {
             resolve(result.rows[0])
@@ -109,11 +126,10 @@ module.exports = function(pool) {
   const addOrganization =  function(organization, creatorId) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`INSERT INTO organizations (name, description, creator_id) VALUES ($1, $2, $3) RETURNING *;`, [organization.name, organization.password, creatorId])
+        .query(`INSERT INTO organizations (name, description, creator_id) VALUES ($1, $2, $3) RETURNING *;`, [organization.name, organization.description, creatorId])
         .then((result) => {
-          console.log(result);
           if(result && result.rowCount) {
-            pool.query(`INSERT INTO user_organizations (user_id, organization_id) VALUES ($1, $2) RETURNING *;`, [creatorId, result.rows[0].id]);
+            pool.query(`UPDATE users SET organization_id=$1 WHERE id=$2;`, [result.rows[0].id, creatorId]);
             resolve(result.rows[0])
           }
 
@@ -201,7 +217,7 @@ module.exports = function(pool) {
     return new Promise((resolve, reject) => {
       pool
         .query(`UPDATE accounts SET category_id=$1, name=$2, description=$3, url=$4, username=$5, password=$6 WHERE id=$7;`,
-        [account, organization.description, organization.id, creatorId])
+        [account.categoryId, account.name, account.description, account.url, account.username, account.password, account.id])
         .then((result) => {
           console.log(result);
           if(result && result.rowCount) {
@@ -220,12 +236,9 @@ module.exports = function(pool) {
   const deleteAccount =  function(id, creatorId) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`DELETE FROM organizations WHERE id=$1 AND creator_id=$2;`, [id, creatorId])
+        .query(`DELETE FROM accounts WHERE id=$1 AND user_id=$2;`, [id, creatorId])
         .then(() => {
-          pool
-            .query(`DELETE FROM user_organizations WHERE organization_id=$1;`, [id]);
-
-          resolve(null);
+          resolve(true);
         })
         .catch((err) => {
           reject(err);
@@ -234,11 +247,11 @@ module.exports = function(pool) {
   }
 
   // Share Account to Organization
-  const shareAccountToOrg =  function(account, userId, organizationId) {
+  const shareAccountToOrg =  function(accountId, organizationId) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`INSERT INTO accounts (user_id, category_id, name, description, url, username, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
-        [ userId, account.categoryId, account.name, account.description, account.url, account.username, account.password ])
+        .query(`UPDATE accounts SET organization_id=$1 WHERE id=$2 RETURNING *;`,
+        [ organizationId, accountId ])
         .then((result) => {
           if(result && result.rowCount) {
             resolve(result.rows[0])
@@ -253,11 +266,11 @@ module.exports = function(pool) {
   }
 
   // Unshare Account to Organization
-  const UnshareFromOrg =  function(account, userId, organizationId) {
+  const unshareFromOrg =  function(accountId) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`INSERT INTO accounts (user_id, category_id, name, description, url, username, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
-        [ userId, account.categoryId, account.name, account.description, account.url, account.username, account.password ])
+        .query(`UPDATE accounts SET organization_id=NULL WHERE id=$1 RETURNING *;`,
+        [ accountId ])
         .then((result) => {
           if(result && result.rowCount) {
             resolve(result.rows[0])
@@ -276,13 +289,18 @@ module.exports = function(pool) {
     getUserWithEmailPassword,
     getUserWithEmail,
     getUserWithId,
-    getOrganizationWithId,
+    getAccountWithOrgId,
+    getOrganizationWithUserId,
     getOrganizationWithNameId,
     addOrganization,
     addUserToOrganization,
     updateOrganization,
     deleteOrganization,
-    addAccount
+    addAccount,
+    updateAccount,
+    deleteAccount,
+    shareAccountToOrg,
+    unshareFromOrg
   };
 
   /**
