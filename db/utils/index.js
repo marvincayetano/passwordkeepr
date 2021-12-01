@@ -72,10 +72,27 @@ module.exports = function(pool) {
       });
   }
 
-  const getOrganizationWithId = function(id) {
+  const getOrganizationWithUserId = function(id) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`SELECT * FROM organizations JOIN accounts ON organizations.id = accounts.organization_id WHERE organizations.id=$1 LIMIT 1;`, [id])
+        .query(`SELECT *, users.id as user_id FROM organizations JOIN users ON organizations.id = users.organization_id WHERE users.id=$1 LIMIT 1;`, [id])
+        .then((result) => {
+          if(result && result.rowCount) {
+            resolve(result.rows[0])
+          }
+
+          resolve(null);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+      });
+  }
+
+  const getAccountWithOrgId = function(id) {
+    return new Promise((resolve, reject) => {
+      pool
+        .query(`SELECT * FROM accounts JOIN organizations ON organizations.id = accounts.organization_id WHERE organizations.id=$1 LIMIT 1;`, [id])
         .then((result) => {
           if(result && result.rowCount) {
             resolve(result.rows[0])
@@ -109,11 +126,10 @@ module.exports = function(pool) {
   const addOrganization =  function(organization, creatorId) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`INSERT INTO organizations (name, description, creator_id) VALUES ($1, $2, $3) RETURNING *;`, [organization.name, organization.password, creatorId])
+        .query(`INSERT INTO organizations (name, description, creator_id) VALUES ($1, $2, $3) RETURNING *;`, [organization.name, organization.description, creatorId])
         .then((result) => {
-          console.log(result);
           if(result && result.rowCount) {
-            pool.query(`INSERT INTO user_organizations (user_id, organization_id) VALUES ($1, $2) RETURNING *;`, [creatorId, result.rows[0].id]);
+            pool.query(`UPDATE users SET organization_id=$1 WHERE id=$2;`, [result.rows[0].id, creatorId]);
             resolve(result.rows[0])
           }
 
@@ -273,7 +289,8 @@ module.exports = function(pool) {
     getUserWithEmailPassword,
     getUserWithEmail,
     getUserWithId,
-    getOrganizationWithId,
+    getAccountWithOrgId,
+    getOrganizationWithUserId,
     getOrganizationWithNameId,
     addOrganization,
     addUserToOrganization,
