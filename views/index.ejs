@@ -22,7 +22,7 @@
   <body>
     <%- include("partials/_header") %>
     <main style="margin: 1em">
-    <form id = 'modal' action = '/' method = 'POST'>
+
      <button type="button" class="btn btn-primary" data-toggle="modal" data-target=".bd-example-modal-lg">Add New Profile</button>
 
 <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
@@ -30,6 +30,7 @@
     <div class="modal-content">
       <p>Please select profile category:</p>
       <div class="btn-group btn-group-toggle" data-toggle="buttons">
+     <form id = 'modal' action = '/accounts/' method = 'POST'>
         <label class="btn btn-secondary active">
           <input type="radio" name="options" id="Social" autocomplete="off" checked> Social
         </label>
@@ -56,8 +57,11 @@
         <input type="text" class="form-control" id="username">
       </div>
       <div class="form-group">
-        <label for="recipient-name" class="col-form-label">Password</label>
-        <input type="password" class="form-control" id="password">
+        <label for="recipient-name" class="col-form-label">Password requirements</label>
+        <input type="text" class="form-control" id="length" >
+        <input type="radio" class="form-control" id="numbers">
+        <input type="radio" class="form-control" id="case_sensitive">
+        <input type="radio" class="form-control" id="special_characters">
       </div>
 
 
