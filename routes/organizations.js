@@ -52,7 +52,7 @@ module.exports = function(router, database) {
       addUserToOrganization(orgId, invite.email)
       .then(user => {
         if (!user) {
-          res.send({error: "Error occured while adding user to organization..."});
+          res.render('organization', { data: result, error: "Error occured while adding user... User might not exist in the database"});
           return;
         }
 
