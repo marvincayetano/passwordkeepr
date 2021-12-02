@@ -30,7 +30,7 @@ CREATE TABLE category (
 CREATE TABLE accounts (
   id SERIAL PRIMARY KEY NOT NULL,
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
-  organization_id INTEGER REFERENCES organizations(id) ON DELETE CASCADE,
+  organization_id INTEGER REFERENCES organizations(id),
   category_id INTEGER REFERENCES category(id) ON DELETE CASCADE,
   name VARCHAR(255) NOT NULL,
   description VARCHAR(255) NOT NULL,
