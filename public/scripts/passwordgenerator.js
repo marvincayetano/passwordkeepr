@@ -1,4 +1,4 @@
-let arrayFromLowToHigh = (low, high) => {
+let arrayLength = (low, high) => {
   const array = [];
   for (let i = low; i <= high; i++) {
     array.push(i);
@@ -6,41 +6,40 @@ let arrayFromLowToHigh = (low, high) => {
   return array;
 };
 
-let generatePassword = (characterAmount) => {
-  const upperCaseCodes = arrayFromLowToHigh(65, 90);
-  const lowerCaseCodes = arrayFromLowToHigh(97, 122);
-  const numberCodes = arrayFromLowToHigh(48, 57);
-  const symbolCodes = arrayFromLowToHigh(33, 47)
-    .concat(arrayFromLowToHigh(58, 64))
-    .concat(arrayFromLowToHigh(91, 96))
-    .concat(arrayFromLowToHigh(123, 126));
+const upperCaseCode = arrayLength(65, 70);
+const lowerCaseCode = arrayLength(97, 100);
+const numberCode = arrayLength(48, 50);
+const symbolCode = arrayLength(33, 40)
+  .concat(arrayLength(58, 60))
+  .concat(arrayLength(91, 94))
+  .concat(arrayLength(123, 124));
 
+let generatePassword = (options) => {
   let startPass = [];
-  if (generater.includeLowerCaseCode) {
-    startPass = startPass.concat(lowerCaseCodes);
+  if (options.includeLowercase) {
+    startPass = startPass.concat(lowerCaseCode);
   }
-  if (generater.includeUpperCaseCode) {
-    startPass = startPass.concat(upperCaseCodes);
+  if (options.includeUppercase) {
+    startPass = startPass.concat(upperCaseCode);
   }
-  if (generater.includeNumberCodes) {
-    startPass = startPass.concat(numberCodes);
+  if (options.includeNumbers) {
+    startPass = startPass.concat(numberCode);
   }
-  if (generater.includeSymbolCodes) {
-    startPass = startPass.concat(symbolCodes);
+  if (options.includeSymbols) {
+    startPass = startPass.concat(symbolCode);
   }
+
   const finalPass = [];
-  for (let i = 0; i < characterAmount; i++) {
-    const charcter = String.fromCharCode(
-      startPass[Math.floor(Math.random() * startPass.length)]
-    );
-    finalPass.push(charcter);
+  for (let i = 0; i < options.characterAmount; i++) {
+    const characterCode = startPass[Math.floor(Math.random() * startPass.length)];
+    finalPass.push(String.fromCharCode(characterCode));
   }
-  finalPass = finalPass.join("");
-  return finalPass;
+
+  return finalPass.join("");
 };
 
 $(document).ready(function () {
-  const resultDOM = $("#result");
+  const resultDOM = $("#resultDOM");
   const lengthDOM = $("#length");
   const lowercaseDOM = $("#lowercase");
   const uppercaseDOM = $("#uppercase");
@@ -65,7 +64,6 @@ $(document).ready(function () {
     };
 
     const password = generatePassword(options);
-    console.log(password);
 
     resultDOM.val(password);
   });

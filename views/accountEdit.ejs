@@ -18,6 +18,7 @@
     />
 
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="/scripts/passwordgenerator.js"></script>
     <!-- <script src="/scripts/organization.js"></script> -->
     <title>PasswordKeeper</title>
   </head>
@@ -78,7 +79,7 @@
                   <label for="recipient-name" class="col-form-label">Password</label>
                   <div class="d-flex">
                     <input type="text" class="form-control" id="resultDOM" name="password" value="<%= data.account.password%>" required>
-                    <button id="generate" class="btn btn-primary mb-2">Generate</button>
+                    <button type="button" id="generate" class="btn btn-primary mb-2">Generate</button>
                   </div>
                   <div class="d-flex align-items-center">
                     <div class="form-check pr-1">
