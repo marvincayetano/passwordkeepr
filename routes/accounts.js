@@ -5,11 +5,12 @@ module.exports = function(router, database) {
   // Create Account
   router.post('/accounts', (req, res) => {
     const account = req.body;
+    console.log(account);
 
     // Check if organization with the same name exists with your id
     addAccount(account, req.session.id).then(result => {
       if(result !== null) {
-        res.send({ account });
+        res.redirect('/');
         return;
       }
     });

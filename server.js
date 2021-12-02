@@ -51,10 +51,11 @@ app.use(express.static("public"));
 
 // Separated Routes for each Resource
 // Note: Feel free to replace the example routes below with your own
-const usersRoutes = require("./routes/users");
-const authRoutes = require("./routes/auth");
+
 // All the gets are here
 const pagesRoutes = require('./routes/pages');
+
+const authRoutes = require("./routes/auth");
 const accountRoutes = require('./routes/accounts');
 const organizationRoutes = require('./routes/organizations');
 
@@ -71,46 +72,6 @@ app.use("/", organizationRoutes(router, db));
 // Warning: avoid creating more routes in this file!
 // Separate them into separate routes files (see above).
 
-app.get("/", (req, res) => {
-  res.render("index");
-});
-
 app.listen(PORT, () => {
   console.log(`Example app listening on port ${PORT}`);
 });
-
-app.get("/register", (req, res) => {
-  const templateVars = {user: null}
-  res.render("register", templateVars)
-})
-app.post("/register", (req, res) => {
- const user = addUser(req.body)
- const id = user.id;
- req.session.id = id;
-  res.redirect("/")
-})
-
-app.get("/login", (req, res) => {
-  const templateVars = {user: null}
-  res.render("login", templateVars)
-})
-
-app.post("/login", (req, res) => {
-const email = req.body.email;
-const password = req.body.password;
-
-const user = getUserWithEmailPassword(email, password)
-
-if(!user) {
-  res.send("user does not exist")
-}
-const id = user.id
-req.session.id = id;
-
-  res.redirect('/')
-
-})
-
-app.post("/logout", (req, res) => {
-
-})

@@ -106,6 +106,23 @@ module.exports = function(pool) {
       });
   }
 
+  const getAccountWithUserId = function(id) {
+    return new Promise((resolve, reject) => {
+      pool
+        .query(`SELECT * FROM accounts WHERE user_id=$1;`, [id])
+        .then((result) => {
+          if(result && result.rowCount) {
+            resolve(result.rows)
+          }
+
+          resolve(null);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+      });
+  }
+
   const getOrganizationWithNameId = function(orgName, id) {
     return new Promise((resolve, reject) => {
       pool
@@ -197,8 +214,8 @@ module.exports = function(pool) {
   const addAccount =  function(account, userId) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`INSERT INTO accounts (user_id, category_id, name, description, url, username, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
-        [ userId, account.categoryId, account.name, account.description, account.url, account.username, account.password ])
+        .query(`INSERT INTO accounts (user_id, category_id, url, description, username, password) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *;`,
+        [ userId, parseInt(account.category), account.url, account.description, account.username, account.password ])
         .then((result) => {
           if(result && result.rowCount) {
             resolve(result.rows[0])
@@ -289,6 +306,7 @@ module.exports = function(pool) {
     getUserWithEmailPassword,
     getUserWithEmail,
     getUserWithId,
+    getAccountWithUserId,
     getAccountWithOrgId,
     getOrganizationWithUserId,
     getOrganizationWithNameId,

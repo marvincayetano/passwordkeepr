@@ -9,8 +9,10 @@ INSERT INTO users (email, password) VALUES
 
 INSERT INTO category (name, description) VALUES
 ('Social', 'Social Media (eg. Facebook, Twitter, Instagram, etc)'),
+('Entertainment', 'Entertainment (eg. Youtube, Netflix, etc)'),
+('Financial', 'Money Related'),
 ('Work', 'Work Related'),
-('Entertainment', 'Entertainment (eg. Youtube, Netflix, etc)');
+('Other', 'Gaming, Shopping, etc.');
 
 INSERT INTO organizations(name, description, creator_id) VALUES
 ('Lighthouse Labs Student', 'Organization for students of lighthouse labs', 1);

@@ -1,5 +1,5 @@
 module.exports = function(router, database) {
-  const { getAccountWithOrgId, getOrganizationWithUserId } = require('../db/utils')(database);
+  const { getAccountWithOrgId, getOrganizationWithUserId, getAccountWithUserId } = require('../db/utils')(database);
 
   router.get('/register', (_req, res) => {
     res.render('register');
@@ -42,8 +42,20 @@ module.exports = function(router, database) {
     });
   });
 
-  router.get('/', (_req, res) => {
-    res.render('index');
+  router.get('/', (req, res) => {
+    if(!req.session.id) {
+      res.redirect('/login');
+    }
+
+    getOrganizationWithUserId(req.session.id).then(userWithOrg => {
+        getAccountWithUserId(req.session.id).then(accounts => {
+          console.log(accounts);
+          if(accounts && accounts.length) {
+            userWithOrg.accounts = accounts;
+          }
+          res.render('index', { data: userWithOrg });
+      });
+    });
   });
 
   return router;

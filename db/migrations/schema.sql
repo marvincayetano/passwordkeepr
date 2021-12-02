@@ -32,7 +32,6 @@ CREATE TABLE accounts (
   user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   organization_id INTEGER REFERENCES organizations(id),
   category_id INTEGER REFERENCES category(id) ON DELETE CASCADE,
-  name VARCHAR(255) NOT NULL,
   description VARCHAR(255) NOT NULL,
   url VARCHAR(255) NOT NULL,
   username VARCHAR(255) NOT NULL,
