@@ -72,7 +72,13 @@ app.use("/", organizationRoutes(router, db));
 // Separate them into separate routes files (see above).
 
 app.get("/", (req, res) => {
-  res.render("index");
+  templateVars = {
+    user: {
+      name: tiffany,
+      id: 1
+    }
+  }
+  res.render("index", templateVars);
 });
 
 app.listen(PORT, () => {
