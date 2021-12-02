@@ -1,6 +1,6 @@
 
 module.exports = function(router, database) {
-  const { addAccount, updateAccount, deleteAccount, shareAccountToOrg, unshareFromOrg } = require('../db/utils')(database);
+  const { addAccount, updateAccount, deleteAccount, shareAccountToOrg, unshareFromOrg, getUserWithId } = require('../db/utils')(database);
 
   // Create Account
   router.post('/accounts', (req, res) => {
@@ -16,52 +16,42 @@ module.exports = function(router, database) {
     });
   });
 
-  // // Create Account for organization
-  // router.post('/organizations/:id/accounts', (req, res) => {
-  //   const account = req.body;
-  //   const organization_id = req.params.id;
-
-  //   // Check if organization with the same name exists with your id
-  //   addAccount(account, req.session.id).then(result => {
-  //     if(result !== null) {
-  //       res.send({ account });
-  //       return;
-  //     }
-  //   });
-  // });
-
   // Update Account
   router.post('/accounts/:id', (req, res) => {
     const account = req.body;
-    account.id = req.params.id;
+    const accountId = req.params.id;
 
-    updateAccount(account).then(result => {
+    updateAccount(accountId, account).then(result => {
       if(result !== null) {
-        res.send({ result });
+        res.redirect('/');
         return;
       }
     });
   });
 
   // Delete Account
-  router.delete('/accounts/:id', (req, res) => {
+  router.post('/accounts/:id/delete', (req, res) => {
     const accountId = req.params.id;
 
-
-    deleteAccount(account_id, req.session.id).then(result => {
+    deleteAccount(accountId, req.session.id).then(result => {
       if(result) {
-        res.send({ success: true });
+        res.redirect('/');
       }
     });
   });
 
   // Share Account to Organization
-  router.patch('/accounts/:id/share', (req, res) => {
-    const organizationId = req.body;
+  router.post('/accounts/:id/share', (req, res) => {
+    const accountId = req.params.id;
 
-    shareAccountToOrg(req.params.id, organizationId).then(result => {
-      if(result !== null) {
-        res.send({ result });
+    getUserWithId(req.session.id).then(user => {
+      if(user) {
+        shareAccountToOrg(accountId, user.organization_id).then(() => {
+          res.redirect('/');
+          return;
+        });
+      } else {
+        res.redirect('/');
         return;
       }
     });
@@ -69,9 +59,16 @@ module.exports = function(router, database) {
 
   // Unshare Account to Organization
   router.post('/accounts/:id/unshare', (req, res) => {
-    unshareFromOrg(req.params.id).then(result => {
-      if(result !== null) {
-        res.send({ result });
+    const accountId = req.params.id;
+
+    getUserWithId(req.params.id).then(user => {
+      if(user) {
+        unshareFromOrg(accountId).then(() => {
+          res.redirect('/');
+          return;
+        });
+      } else {
+        res.redirect('/');
         return;
       }
     });

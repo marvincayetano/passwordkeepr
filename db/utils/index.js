@@ -92,7 +92,24 @@ module.exports = function(pool) {
   const getAccountWithOrgId = function(id) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`SELECT * FROM accounts JOIN organizations ON organizations.id = accounts.organization_id WHERE organizations.id=$1 LIMIT 1;`, [id])
+        .query(`SELECT * FROM accounts JOIN organizations ON organizations.id = accounts.organization_id WHERE organizations.id=$1;`, [id])
+        .then((result) => {
+          if(result && result.rowCount) {
+            resolve(result.rows)
+          }
+
+          resolve(null);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+      });
+  }
+
+  const getSingleAccountWithUserId = function(userId, id) {
+    return new Promise((resolve, reject) => {
+      pool
+        .query(`SELECT * FROM accounts WHERE user_id=$1 AND id=$2;`, [userId, id])
         .then((result) => {
           if(result && result.rowCount) {
             resolve(result.rows[0])
@@ -109,7 +126,7 @@ module.exports = function(pool) {
   const getAccountWithUserId = function(id) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`SELECT * FROM accounts WHERE user_id=$1;`, [id])
+        .query(`SELECT * FROM accounts WHERE user_id=$1 ORDER BY createdat;`, [id])
         .then((result) => {
           if(result && result.rowCount) {
             resolve(result.rows)
@@ -230,13 +247,12 @@ module.exports = function(pool) {
   }
 
   // Update Account
-  const updateAccount =  function(account) {
+  const updateAccount =  function(accountId, account) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`UPDATE accounts SET category_id=$1, name=$2, description=$3, url=$4, username=$5, password=$6 WHERE id=$7;`,
-        [account.categoryId, account.name, account.description, account.url, account.username, account.password, account.id])
+        .query(`UPDATE accounts SET category_id=$1, description=$2, url=$3, username=$4, password=$5 WHERE id=$6;`,
+        [parseInt(account.category), account.description, account.url, account.username, account.password, accountId])
         .then((result) => {
-          console.log(result);
           if(result && result.rowCount) {
             resolve(result.rows[0])
           }
@@ -271,12 +287,13 @@ module.exports = function(pool) {
         [ organizationId, accountId ])
         .then((result) => {
           if(result && result.rowCount) {
-            resolve(result.rows[0])
+            resolve(result.rows[0]);
           }
 
           resolve(null);
         })
         .catch((err) => {
+          console.log(err);
           reject(err);
         });
     });
@@ -315,6 +332,7 @@ module.exports = function(pool) {
     updateOrganization,
     deleteOrganization,
     addAccount,
+    getSingleAccountWithUserId,
     updateAccount,
     deleteAccount,
     shareAccountToOrg,

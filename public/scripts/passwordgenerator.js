@@ -6,7 +6,7 @@ let arrayFromLowToHigh = (low, high) => {
   return array;
 };
 
-let generatePassword = (generater) => {
+let generatePassword = (characterAmount) => {
   const upperCaseCodes = arrayFromLowToHigh(65, 90);
   const lowerCaseCodes = arrayFromLowToHigh(97, 122);
   const numberCodes = arrayFromLowToHigh(48, 57);
@@ -28,8 +28,8 @@ let generatePassword = (generater) => {
   if (generater.includeSymbolCodes) {
     startPass = startPass.concat(symbolCodes);
   }
-  let finalPass = [];
-  for (let i = 0; i < generater.characterAmount; i++) {
+  const finalPass = [];
+  for (let i = 0; i < characterAmount; i++) {
     const charcter = String.fromCharCode(
       startPass[Math.floor(Math.random() * startPass.length)]
     );
@@ -40,22 +40,22 @@ let generatePassword = (generater) => {
 };
 
 $(document).ready(function () {
-  const resultDOM = document.getElementById("result");
-  const lengthDOM = document.getElementById("length");
-  const lowercaseDOM = document.getElementById("lowercase");
-  const uppercaseDOM = document.getElementById("uppercase");
-  const numbersDOM = document.getElementById("numbers");
-  const symbolsDOM = document.getElementById("symbols");
-  const generatebtn = document.getElementById("generate");
-  const form = document.getElementById("passwordGeneratorForm");
+  const resultDOM = $("#result");
+  const lengthDOM = $("#length");
+  const lowercaseDOM = $("#lowercase");
+  const uppercaseDOM = $("#uppercase");
+  const numbersDOM = $("#numbers");
+  const symbolsDOM = $("#symbols");
+  const generatebtn = $("#generate");
 
-  form.addEventListener("submit", (event) => {
+  generatebtn.on("click", (event) => {
     event.preventDefault();
-    const characterAmount = lengthDOM.value;
-    const includeLowercase = lowercaseDOM.checked;
-    const includeUppercase = uppercaseDOM.checked;
-    const includeNumbers = numbersDOM.checked;
-    const includeSymbols = symbolsDOM.checked;
+    const characterAmount = parseInt(lengthDOM.val());
+    const includeLowercase = lowercaseDOM.is(":checked");
+    const includeUppercase = uppercaseDOM.is(":checked");
+    const includeNumbers = numbersDOM.is(":checked");
+    const includeSymbols = symbolsDOM.is(":checked");
+
     const options = {
       characterAmount,
       includeLowercase,
@@ -63,7 +63,10 @@ $(document).ready(function () {
       includeNumbers,
       includeSymbols,
     };
+
     const password = generatePassword(options);
-    $("#new_password").val(password);
+    console.log(password);
+
+    resultDOM.val(password);
   });
 });

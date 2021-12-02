@@ -16,8 +16,10 @@
       integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
       crossorigin="anonymous"
     />
-
     <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script type="text/javascript" src="/scripts/copyToClipboard.js"></script>
+
     <!-- <script src="/scripts/organization.js"></script> -->
     <title>PasswordKeeper</title>
   </head>
@@ -169,7 +171,60 @@
             </li>
           </ol>
         </div>
+
+        <% if(data.accounts !== null) { %> <% for(const account of
+        data.accounts) { %>
+        <div
+          class="w-full rounded d-flex flex-column p-3 mb-5"
+          style="background-color: wheat"
+        >
+          <div class="d-flex">
+            <h3><%= account.url %></h3>
+            <p class="ml-3">
+              <% if(account.category_id === 1) { %>
+              <span class="badge badge-primary">Social</span>
+              <% } else if(account.category_id === 2) { %>
+              <span class="badge badge-secondary">Entertainment</span>
+              <% } else if(account.category_id === 3) { %>
+              <span class="badge badge-success">Financial</span>
+              <% } else if(account.category_id === 4) { %>
+              <span class="badge badge-warning">Work-Related</span>
+              <% } else if(account.category_id === 5) { %>
+              <span class="badge badge-info">Other</span>
+              <% } %>
+            </p>
+          </div>
+          <div>
+            <h6><%= account.description %></h6>
+            <div class="pb-3 d-flex">
+              <input
+                class="w-50"
+                value="<%= account.username %>"
+                id="<%= account.id %>-username"
+                disabled
+              />
+              <button id="copyBtnUsername" value="<%= account.id %>-username">
+                copy
+              </button>
+            </div>
+            <div class="pb-3 d-flex">
+              <input
+                class="w-50"
+                value="<%= account.password %>"
+                id="<%= account.id %>-password"
+                disabled
+              />
+              <button id="copyBtnPassword" value="<%= account.id %>-password">
+                copy
+              </button>
+            </div>
+          </div>
+        </div>
+        <% } %> <% } %>
+        <!-- END OF CONTAINER -->
       </div>
+      <!-- The actual snackbar -->
+      <div id="snackbar">Copied text!</div>
     </main>
 
     <!-- Bootstrap JS -->

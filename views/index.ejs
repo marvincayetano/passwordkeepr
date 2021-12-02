@@ -16,6 +16,10 @@
       integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS"
       crossorigin="anonymous"
     />
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+    <script type="text/javascript" src="/scripts/copyToClipboard.js"></script>
+    <script type="text/javascript" src="/scripts/passwordgenerator.js"></script>
 
     <title>PasswordKeeper</title>
   </head>
@@ -40,60 +44,197 @@
             >
               Add Account
             </button>
-            <div id="addAccountModal" class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true">
+            <div
+              id="addAccountModal"
+              class="modal fade bd-example-modal-lg"
+              tabindex="-1"
+              role="dialog"
+              aria-labelledby="myLargeModalLabel"
+              aria-hidden="true"
+            >
               <div class="modal-dialog modal-lg">
                 <div class="modal-content p-5">
                   <h2>Please select profile category:</h2>
                   <form action="/accounts" method="post">
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="category" id="flexRadioDefault1" value=1 checked>
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="category"
+                        id="flexRadioDefault1"
+                        value="1"
+                        checked
+                      />
                       <label class="form-check-label" for="flexRadioDefault1">
                         Social
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="category" id="flexRadioDefault2" value=2>
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="category"
+                        id="flexRadioDefault2"
+                        value="2"
+                      />
                       <label class="form-check-label" for="flexRadioDefault2">
                         Entertainment
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="category" id="flexRadioDefault3" value=3>
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="category"
+                        id="flexRadioDefault3"
+                        value="3"
+                      />
                       <label class="form-check-label" for="flexRadioDefault3">
                         Financial
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="category" id="flexRadioDefault4" value=4>
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="category"
+                        id="flexRadioDefault4"
+                        value="4"
+                      />
                       <label class="form-check-label" for="flexRadioDefault4">
                         Work-Related
                       </label>
                     </div>
                     <div class="form-check">
-                      <input class="form-check-input" type="radio" name="category" id="flexRadioDefault5" value=5>
+                      <input
+                        class="form-check-input"
+                        type="radio"
+                        name="category"
+                        id="flexRadioDefault5"
+                        value="5"
+                      />
                       <label class="form-check-label" for="flexRadioDefault5">
                         Other
                       </label>
                     </div>
 
                     <div class="form-group">
-                      <label for="recipient-name" class="col-form-label">Enter Website Here:</label>
-                      <input type="url" class="form-control" id="website-name" name="url" required>
+                      <label for="recipient-name" class="col-form-label"
+                        >Enter Website Here:</label
+                      >
+                      <input
+                        type="url"
+                        class="form-control"
+                        id="website-name"
+                        name="url"
+                        required
+                      />
                     </div>
                     <div class="form-group">
-                      <label for="recipient-name" class="col-form-label">Username</label>
-                      <input type="text" class="form-control" id="username" name="username" required>
+                      <label for="recipient-name" class="col-form-label"
+                        >Username</label
+                      >
+                      <input
+                        type="text"
+                        class="form-control"
+                        id="username"
+                        name="username"
+                        required
+                      />
                     </div>
                     <div class="form-group">
-                      <label for="recipient-name" class="col-form-label">Password</label>
-                      <input type="text" class="form-control" id="password" name="password" required>
-                    <div class="form-group">
-                      <label for="message-text" class="col-form-label">Description:</label>
-                      <textarea class="form-control" id="message-text" name="description" required></textarea>
+                      <label for="recipient-name" class="col-form-label"
+                        >Password</label
+                      >
+                      <div class="d-flex">
+                        <input type="text" class="form-control" id="resultDOM" name="password" required>
+                        <button id="generate" class="btn btn-primary mb-2">Generate</button>
+                      </div>
+                      <div class="d-flex align-items-center">
+                        <div class="form-check pr-1">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="lowercase"
+                            checked
+                          />
+                          <label class="form-check-label" for="lowercase">
+                            Lowercase
+                          </label>
+                        </div>
+                        <div class="form-check pr-1">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="uppercase"
+                            checked
+                          />
+                          <label class="form-check-label" for="uppercase">
+                            Uppercase
+                          </label>
+                        </div>
+                        <div class="form-check pr-1">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="numbers"
+                            checked
+                          />
+                          <label class="form-check-label" for="numbers">
+                            Numbers
+                          </label>
+                        </div>
+                        <div class="form-check pr-1">
+                          <input
+                            class="form-check-input"
+                            type="checkbox"
+                            value=""
+                            id="symbols"
+                            checked
+                          />
+                          <label class="form-check-label" for="symbols">
+                            Symbols
+                          </label>
+                        </div>
+                        <div class="form-check pr-1">
+                          <div class="d-flex align-items-center mb-2">
+                            <label for="recipient-name" class="form-label mr-2"
+                              >Length</label
+                            >
+                            <input
+                              type="text"
+                              class="form-control"
+                              id="length"
+                              value="8"
+                            />
+                          </div>
+                        </div>
                     </div>
                     <div class="form-group">
-                      <button type="submit" class="btn btn-primary">Create</button>
-                      <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                      <label for="message-text" class="col-form-label"
+                        >Description:</label
+                      >
+                      <textarea
+                        class="form-control"
+                        id="message-text"
+                        name="description"
+                        required
+                      ></textarea>
+                    </div>
+                    <div class="form-group">
+                      <button type="submit" class="btn btn-success">
+                        Create
+                      </button>
+                      <button
+                        type="button"
+                        class="btn btn-secondary"
+                        data-dismiss="modal"
+                      >
+                        Cancel
+                      </button>
                     </div>
                   </form>
                 </div>
@@ -110,47 +251,136 @@
         </ol>
         <!-- <% if(typeof data.accounts !== 'undefined') %> -->
         <% for(const account of data.accounts) { %>
-          <div class="w-full rounded d-flex flex-column p-3 mb-5" style="background-color: wheat;">
-            <div class="d-flex">
-              <h3><%= account.url %></h3>
-              <p class="ml-3">
-                <% if(account.category_id === 1) { %>
-                  <span class="badge badge-primary">Social</span>
-                <% } else if(account.category_id === 2) { %>
-                  <span class="badge badge-secondary">Entertainment</span>
-                <% } else if(account.category_id === 3) { %>
-                  <span class="badge badge-success">Financial</span>
-                <% } else if(account.category_id === 4) { %>
-                  <span class="badge badge-warning">Work-Related</span>
-                <% } else if(account.category_id === 5) { %>
-                  <span class="badge badge-info">Other</span>
-                <% } %>
-              </p>
+        <div
+          class="w-full rounded d-flex flex-column p-3 mb-5"
+          style="background-color: wheat"
+        >
+          <div class="d-flex">
+            <h3><%= account.url %></h3>
+            <p class="ml-3">
+              <% if(account.category_id === 1) { %>
+              <span class="badge badge-primary">Social</span>
+              <% } else if(account.category_id === 2) { %>
+              <span class="badge badge-secondary">Entertainment</span>
+              <% } else if(account.category_id === 3) { %>
+              <span class="badge badge-success">Financial</span>
+              <% } else if(account.category_id === 4) { %>
+              <span class="badge badge-warning">Work-Related</span>
+              <% } else if(account.category_id === 5) { %>
+              <span class="badge badge-info">Other</span>
+              <% } %>
+            </p>
+          </div>
+          <div>
+            <h6><%= account.description %></h6>
+            <div class="pb-3 d-flex">
+              <input
+                class="w-50"
+                value="<%= account.username %>"
+                id="<%= account.id %>-username"
+                disabled
+              />
+              <button id="copyBtnUsername" value="<%= account.id %>-username">
+                copy
+              </button>
             </div>
-            <div>
-              <h6><%= account.description %></h6>
-              <div class="pb-3 d-flex">
-                <input class="w-50" value="<%= account.username %>" disabled />
-                <button>copy</button>
-              </div>
-              <div class="pb-3 d-flex">
-                <input class="w-50" value="<%= account.password %>" disabled />
-                <button>copy</button>
-              </div>
-              <div>
-                <button type="button" class="btn btn-primary">Edit</button>
-                <button type="button" class="btn btn-secondary">Share</button>
-                <button type="button" class="btn btn-danger">Delete</button>
+            <div class="pb-3 d-flex">
+              <input
+                class="w-50"
+                value="<%= account.password %>"
+                id="<%= account.id %>-password"
+                disabled
+              />
+              <button id="copyBtnPassword" value="<%= account.id %>-password">
+                copy
+              </button>
+            </div>
+            <div class="d-flex">
+              <form
+                method="GET"
+                class="mr-2"
+                action="/accounts/<%= account.id %>/edit"
+              >
+                <button type="submit" class="btn btn-primary">Edit</button>
+              </form>
+
+              <% if(data.organization_id !== null) { %> <%
+              if(account.organization_id === null) { %>
+              <form
+                action="/accounts/<%= account.id %>/share"
+                class="mr-2"
+                method="post"
+              >
+                <button type="submit" class="btn btn-secondary">Share</button>
+              </form>
+              <% } else { %>
+              <form
+                action="/accounts/<%= account.id %>/unshare"
+                class="mr-2"
+                method="post"
+              >
+                <button type="submit" class="btn btn-secondary">Unshare</button>
+              </form>
+              <% } %> <% } %>
+
+              <button
+                type="button"
+                class="btn btn-danger mr-2"
+                data-toggle="modal"
+                data-target="#deleteAccountModal"
+              >
+                Delete
+              </button>
+
+              <div
+                id="deleteAccountModal"
+                class="modal fade bd-example-modal-lg"
+                tabindex="-1"
+                role="dialog"
+                aria-labelledby="myLargeModalLabel"
+                aria-hidden="true"
+              >
+                <form
+                  action="/accounts/<%= account.id %>/delete"
+                  class="mr-2"
+                  method="post"
+                >
+                  <div class="modal-dialog">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">
+                          Delete <%= account.url %> ?
+                        </h5>
+                      </div>
+                      <div class="modal-body">
+                        This will delete the account completely
+                      </div>
+                      <div class="modal-footer">
+                        <div class="modal-footer">
+                          <button
+                            type="button"
+                            class="btn btn-secondary"
+                            data-dismiss="modal"
+                          >
+                            Close
+                          </button>
+                          <button type="submit" class="btn btn-danger">
+                            Delete
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </form>
               </div>
             </div>
           </div>
+        </div>
         <% } %>
+        <!-- The actual snackbar -->
+        <div id="snackbar">Copied text!</div>
       </div>
     </main>
-
-    <!-- <div class="unauthorized">Please login or register to proceed</div> -->
-    <script defer type="text/javascript" src="/scripts/accounts.js"></script>
-    <script defer type="text/javascript" src="public/scripts/passwordGenerator.js"></script>
 
     <script
       src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -168,6 +398,5 @@
       crossorigin="anonymous"
     ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-
   </body>
 </html>
