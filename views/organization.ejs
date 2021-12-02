@@ -7,6 +7,8 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
 
+    <link rel="stylesheet" href="/styles/main.css" type="text/css" />
+
     <!-- Bootstrap CSS -->
     <link
       rel="stylesheet"
@@ -22,7 +24,7 @@
   <body>
     <%- include("partials/_header") %>
     <main class="d-flex flex-column align-items-center pt-5">
-      <div class="container-fluid w-50">
+      <div class="container-fluid w-75">
         <% if(typeof message !== 'undefined') { %>
         <div class="alert alert-success" role="alert"><%= message %></div>
         <% } %>
@@ -158,13 +160,13 @@
           </div>
         </div>
         <h5><%= data.description %></h5>
-        <nav aria-label="breadcrumb" class="pt-5">
+        <div aria-label="breadcrumb" class="pt-5">
           <ol class="breadcrumb">
             <li class="breadcrumb-item active" aria-current="page">
               Available Accounts
             </li>
           </ol>
-        </nav>
+        </div>
       </div>
     </main>
 
