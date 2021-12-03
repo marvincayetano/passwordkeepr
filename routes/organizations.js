@@ -1,5 +1,5 @@
 module.exports = function(router, database) {
-  const { addOrganization, addUserToOrganization, getOrganizationWithUserId, editOrganization, deleteOrganization, getUserWithId } = require('../db/utils')(database);
+  const { addOrganization, addUserToOrganization, getOrganizationWithUserId, editOrganization, deleteOrganization, unshareAllAccount, getUserWithId } = require('../db/utils')(database);
 
   // Create a new organization
   router.post('/organization', (req, res) => {
@@ -102,12 +102,14 @@ module.exports = function(router, database) {
     const id = req.params.id;
     const creatorId = req.session.id;
 
-    deleteOrganization(id, creatorId)
-    .then(() => {
-      res.redirect('/organization/create')
-    }).catch(err => {
-      console.log(err);
-    });
+    unshareAllAccount(id).then(() => {
+      deleteOrganization(id, creatorId)
+      .then(() => {
+        res.redirect('/organization/create')
+      }).catch(err => {
+        console.log(err);
+      });
+    })
   });
 
   return router;

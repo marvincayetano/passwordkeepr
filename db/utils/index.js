@@ -299,8 +299,26 @@ module.exports = function(pool) {
     });
   }
 
+  const unshareAllAccount = function(orgId) {
+    return new Promise((resolve, reject) => {
+      pool
+        .query(`UPDATE accounts SET organization_id=NULL WHERE organization_id=$1 RETURNING *;`,
+        [ orgId ])
+        .then((result) => {
+          if(result && result.rowCount) {
+            resolve(result.rows[0])
+          }
+
+          resolve(null);
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  }
+
   // Unshare Account to Organization
-  const unshareFromOrg =  function(accountId) {
+  const unshareFromOrg = function(accountId) {
     return new Promise((resolve, reject) => {
       pool
         .query(`UPDATE accounts SET organization_id=NULL WHERE id=$1 RETURNING *;`,
@@ -336,7 +354,8 @@ module.exports = function(pool) {
     updateAccount,
     deleteAccount,
     shareAccountToOrg,
-    unshareFromOrg
+    unshareFromOrg,
+    unshareAllAccount
   };
 
   /**
