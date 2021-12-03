@@ -64,7 +64,7 @@ module.exports = function(router, database) {
   });
 
   router.post('/logout', (req, res) => {
-    req.session.userId = null;
+    req.session.id = null;
     res.redirect('/');
   });
 
