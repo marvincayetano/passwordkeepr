@@ -68,13 +68,13 @@ module.exports = function(router, database) {
     getOrganizationWithUserId(req.session.id).then(userWithOrg => {
       if(userWithOrg) {
         getAccountWithOrgId(userWithOrg.organization_id).then(accounts => {
-          if(accounts.length) {
+          if(accounts && accounts.length) {
             userWithOrg.accounts = accounts;
           }
           res.render('organization', { data: userWithOrg });
         });
       } else {
-        res.render('organizationCreate');
+        res.redirect('/organization');
       }
     });
   });
