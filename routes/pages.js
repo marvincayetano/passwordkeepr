@@ -30,6 +30,11 @@ module.exports = function(router, database) {
   });
 
   router.get('/organization/create', (req, res) => {
+    if(!req.session.id) {
+      res.redirect('/login');
+      return;
+    }
+
     getOrganizationWithUserId(req.session.id).then(result => {
         if(result.organization_id !== null) {
           res.redirect(`/organization/${result.organization_id}`);
@@ -40,6 +45,11 @@ module.exports = function(router, database) {
   });
 
   router.get('/organization', (req, res) => {
+    if(!req.session.id) {
+      res.redirect('/login');
+      return;
+    }
+
     getOrganizationWithUserId(req.session.id).then(result => {
       if(result.organization_id !== null) {
         res.redirect(`/organization/${result.organization_id}`);
@@ -50,10 +60,17 @@ module.exports = function(router, database) {
   });
 
   router.get('/organization/:id', (req, res) => {
+    if(!req.session.id) {
+      res.redirect('/login');
+      return;
+    }
+
     getOrganizationWithUserId(req.session.id).then(userWithOrg => {
       if(userWithOrg) {
         getAccountWithOrgId(userWithOrg.organization_id).then(accounts => {
-          userWithOrg.accounts = accounts;
+          if(accounts.length) {
+            userWithOrg.accounts = accounts;
+          }
           res.render('organization', { data: userWithOrg });
         });
       } else {

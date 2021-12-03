@@ -1,5 +1,5 @@
 module.exports = function(router, database) {
-  const { addOrganization, addUserToOrganization, getOrganizationWithUserId, editOrganization, deleteOrganization, unshareAllAccount, getUserWithId } = require('../db/utils')(database);
+  const { addOrganization, addUserToOrganization, getOrganizationWithUserId, getAccountWithUserId, editOrganization, deleteOrganization, unshareAllAccount, getUserWithId } = require('../db/utils')(database);
 
   // Create a new organization
   router.post('/organization', (req, res) => {
@@ -20,7 +20,7 @@ module.exports = function(router, database) {
       addOrganization(organization, req.session.id)
       .then(organization => {
         if (!organization) {
-          res.send({error: "Error occured while creating a new organization..."});
+          res.send({ error: "Error occured while creating a new organization..." });
           return;
         }
 
@@ -45,18 +45,25 @@ module.exports = function(router, database) {
       // Not the creator
 
       if(result && result.creator_id !== parseInt(id)) {
-        res.render('organization', { error: "Invalid API request!" });
+        res.send({ error: "Invalid API request!" });
         return;
       }
 
       addUserToOrganization(orgId, invite.email)
       .then(user => {
-        if (!user) {
-          res.render('organization', { data: result, error: "Error occured while adding user... User might not exist in the database"});
-          return;
-        }
+        getAccountWithUserId(req.session.id).then(accounts => {
+          if(accounts && accounts.length) {
+            result.accounts = accounts;
+          }
 
-        res.render("organization", { data: result, message: `Successfully added ${invite.email}!` });
+          if (!user) {
+            res.render('organization', { data: result, error: "Error occured while adding new user. User might not exists." });
+            return;
+          }
+
+          res.render("organization", { data: result, message: `Successfully added ${invite.email}!` });
+        });
+
       })
       .catch(e => {
         console.log(e);
