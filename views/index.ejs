@@ -249,7 +249,7 @@
             User Accounts
           </li>
         </ol>
-        <% if(typeof data.accounts !== 'undefined') { %>
+        <% if(data.accounts && typeof data.accounts !== 'undefined') { %>
         <% for(const account of data.accounts) { %>
         <div
           class="w-full rounded d-flex flex-column p-3 mb-5"
