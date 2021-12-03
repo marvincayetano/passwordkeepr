@@ -92,7 +92,7 @@ module.exports = function(pool) {
   const getAccountWithOrgId = function(id) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`SELECT * FROM accounts JOIN organizations ON organizations.id = accounts.organization_id WHERE organizations.id=$1;`, [id])
+        .query(`SELECT * FROM accounts WHERE organization_id=$1;`, [id])
         .then((result) => {
           if(result && result.rowCount) {
             resolve(result.rows)
