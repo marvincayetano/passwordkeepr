@@ -7,7 +7,7 @@ module.exports = function(router, database) {
 
   router.get('/login/:id', (req, res) => {
     req.session.id = req.params.id;
-    res.render('index');
+    res.redirect('/');
   });
 
   router.get('/login', (_req, res) => {
@@ -31,11 +31,20 @@ module.exports = function(router, database) {
 
   router.get('/organization/create', (req, res) => {
     getOrganizationWithUserId(req.session.id).then(result => {
-      console.log(result);
-      if(result !== null) {
+        if(result.organization_id !== null) {
+          res.redirect(`/organization/${result.organization_id}`);
+        } else {
+        res.render('organizationCreate', { data: result });
+        }
+    });
+  });
+
+  router.get('/organization', (req, res) => {
+    getOrganizationWithUserId(req.session.id).then(result => {
+      if(result.organization_id !== null) {
         res.redirect(`/organization/${result.organization_id}`);
       } else {
-        res.render('organizationCreate');
+        res.render('organizationCreate', { data: result });
       }
     });
   });
@@ -60,6 +69,7 @@ module.exports = function(router, database) {
 
     getOrganizationWithUserId(req.session.id).then(userWithOrg => {
         getAccountWithUserId(req.session.id).then(accounts => {
+          console.log(userWithOrg);
           if(accounts && accounts.length) {
             userWithOrg.accounts = accounts;
           }

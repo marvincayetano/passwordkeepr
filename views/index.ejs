@@ -249,7 +249,7 @@
             User Accounts
           </li>
         </ol>
-        <!-- <% if(typeof data.accounts !== 'undefined') %> -->
+        <% if(typeof data.accounts !== 'undefined') { %>
         <% for(const account of data.accounts) { %>
         <div
           class="w-full rounded d-flex flex-column p-3 mb-5"
@@ -281,7 +281,7 @@
                 disabled
               />
               <button id="copyBtnUsername" value="<%= account.id %>-username">
-                copy
+                copy username
               </button>
             </div>
             <div class="pb-3 d-flex">
@@ -292,7 +292,7 @@
                 disabled
               />
               <button id="copyBtnPassword" value="<%= account.id %>-password">
-                copy
+                copy password
               </button>
             </div>
             <div class="d-flex">
@@ -376,6 +376,7 @@
             </div>
           </div>
         </div>
+        <% } %>
         <% } %>
         <!-- The actual snackbar -->
         <div id="snackbar">Copied text!</div>

@@ -75,7 +75,7 @@ module.exports = function(pool) {
   const getOrganizationWithUserId = function(id) {
     return new Promise((resolve, reject) => {
       pool
-        .query(`SELECT *, users.id as user_id FROM organizations JOIN users ON organizations.id = users.organization_id WHERE users.id=$1 LIMIT 1;`, [id])
+        .query(`SELECT *, users.id as user_id FROM organizations RIGHT JOIN users ON organizations.id = users.organization_id WHERE users.id=$1 LIMIT 1;`, [id])
         .then((result) => {
           if(result && result.rowCount) {
             resolve(result.rows[0])
